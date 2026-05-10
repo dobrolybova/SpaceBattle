@@ -5,3 +5,6 @@ class TestException(Exception):
 
     def get_msg(self) -> str:
         return self.msg
+
+    def __repr__(self):
+        return self.msg

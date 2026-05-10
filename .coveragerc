@@ -1,0 +1,2 @@
+[run]
+omit = server/src/main.py, server/tests/*
