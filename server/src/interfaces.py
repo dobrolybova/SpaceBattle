@@ -23,3 +23,13 @@ class IRotatable(Protocol):
 
     def get_angular_velocity(self) -> int:
         ...
+
+
+class ICommand(Protocol):
+    def execute(self):
+        ...
+
+
+class IExceptionHandler(Protocol):
+    def handle(self, cmd: ICommand, exc: Exception) -> ICommand:
+        ...
