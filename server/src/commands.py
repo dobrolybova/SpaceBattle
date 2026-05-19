@@ -1,4 +1,5 @@
 import pathlib
+from typing import List
 
 from server.src.interfaces import ICommand
 
@@ -27,3 +28,12 @@ class RetryTwice:
 
     def execute(self):
         self.cmd.execute()
+
+
+class MacroCommand:
+    def __init__(self, commands: List[ICommand]):
+        self.commands = commands
+
+    def execute(self):
+        for cmd in self.commands:
+            cmd.execute()
