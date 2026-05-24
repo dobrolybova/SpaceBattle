@@ -25,6 +25,14 @@ class IRotatable(Protocol):
         ...
 
 
+class IDirectionChangeable(Protocol):
+    def get_velocity(self) -> int:
+        ...
+
+    def set_velocity(self, v: int) -> None:
+        ...
+
+
 class ICommand(Protocol):
     def execute(self):
         ...
@@ -32,4 +40,15 @@ class ICommand(Protocol):
 
 class IExceptionHandler(Protocol):
     def handle(self, cmd: ICommand, exc: Exception) -> ICommand:
+        ...
+
+
+class IFuelConsumer(Protocol):
+    def get_fuel_level(self) -> int:
+        ...
+
+    def set_fuel_level(self, level: int) -> None:
+        ...
+
+    def get_fuel_consumption_rate(self) -> int:
         ...
