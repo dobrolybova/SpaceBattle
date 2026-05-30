@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Protocol, Any
 
 from server.src.utils import Point, Vector, Direction
 
@@ -51,4 +51,9 @@ class IFuelConsumer(Protocol):
         ...
 
     def get_fuel_consumption_rate(self) -> int:
+        ...
+
+
+class IDependencyResolver(Protocol):
+    def resolve(self, dependency: str, *args) -> Any:
         ...
