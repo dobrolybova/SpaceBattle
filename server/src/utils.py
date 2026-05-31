@@ -11,6 +11,9 @@ class Vector:
     def y(self) -> int:
         return self.yy
 
+    def __eq__(self, vector):
+        return self.xx == vector.xx and self.yy == vector.yy
+
 
 class Point:
     def __init__(self, x: int, y: int):
