@@ -1,7 +1,11 @@
+import asyncio
 import pathlib
 from typing import List
 
-from server.src.interfaces import ICommand
+from server.src.enums import OperationId
+from server.src.interfaces import ICommand, IMovable, IRotatable
+from server.src.ioc import Ioc
+from server.src.schemas import MoveArgs, RotateArgs
 
 
 class WriteToLog:
@@ -37,3 +41,14 @@ class MacroCommand:
     def execute(self):
         for cmd in self.commands:
             cmd.execute()
+
+
+class InterpretCommand:
+    def __init__(self, object_id: IMovable | IRotatable, operation_id: OperationId, args: MoveArgs | RotateArgs):
+        self.object_id = object_id
+        self.operation_id = operation_id
+        self.args = args
+
+    async def execute(self):
+        await asyncio.sleep(0)
+        Ioc.resolve(self.operation_id, self.object_id).execute()

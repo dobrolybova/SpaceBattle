@@ -13,7 +13,7 @@ from server.src.utils import Point, Vector, Direction
 from server.tests.conftest import TestException
 
 
-class SpaceShip:
+class SpaceShip:  # pylint: disable=R0801
     def __init__(self, location: Point, velocity: Vector, direction: Direction, angular_velocity: int):
         self.location = location
         self.velocity = velocity
