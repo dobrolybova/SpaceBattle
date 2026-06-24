@@ -3,7 +3,7 @@ from collections import deque
 from time import sleep
 
 from server.src.interfaces import ICommand
-from server.src.server import ServerThread, HardStop, SoftStop
+from server.src.server_process import ServerThread, HardStop, SoftStop
 from server.tests.conftest import TestException
 
 TEST_FLAG = False
