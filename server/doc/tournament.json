@@ -1,0 +1,313 @@
+{
+    "openapi": "3.1.1",
+    "info": {
+        "title": "Space battle API: Tournament part.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1/tournaments"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "List of all tournament with its data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournaments"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/{tournament}": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TournamentReq"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update tournament data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournament"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong tournament status.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournament"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Participant is not authorised.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tournament"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/{tournament}/ratings": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Ratings data for particular tournament.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ratings"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/ratings/{participant}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Ratings data for particular user.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ratings"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/ratings/calculate": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Rating"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update ratings data."
+                    },
+                    "400": {
+                        "description": "Wrong received data."
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Participant": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "title": "Participant"
+            },
+            "Rating": {
+                "properties": {
+                    "participant": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Participant"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "value": {
+                        "type": "integer",
+                        "title": "Value"
+                    },
+                    "tournament_name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tournament Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "participant",
+                    "value",
+                    "tournament_name"
+                ],
+                "title": "Rating"
+            },
+            "Ratings": {
+                "properties": {
+                    "Ratings": {
+                        "items": {
+                            "$ref": "#/components/schemas/Rating"
+                        },
+                        "type": "array",
+                        "title": "Ratings"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "Ratings"
+                ],
+                "title": "Ratings"
+            },
+            "Result": {
+                "properties": {
+                    "data": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Data"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "Result"
+            },
+            "Tournament": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/TournamentStatus"
+                    },
+                    "participants": {
+                        "items": {
+                            "$ref": "#/components/schemas/Participant"
+                        },
+                        "type": "array",
+                        "title": "Participants"
+                    },
+                    "result": {
+                        "$ref": "#/components/schemas/Result"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "status",
+                    "participants",
+                    "result"
+                ],
+                "title": "Tournament"
+            },
+            "TournamentReq": {
+                "properties": {
+                    "status": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TournamentStatus"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "participant": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Participant"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "status",
+                    "participant"
+                ],
+                "title": "TournamentReq"
+            },
+            "TournamentStatus": {
+                "type": "string",
+                "enum": [
+                    "STARTED",
+                    "NOT_STARTED",
+                    "FINISHED",
+                    "CANCELED"
+                ],
+                "title": "TournamentStatus"
+            },
+            "Tournaments": {
+                "properties": {
+                    "tournaments": {
+                        "items": {
+                            "$ref": "#/components/schemas/Tournament"
+                        },
+                        "type": "array",
+                        "title": "Tournaments"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "tournaments"
+                ],
+                "title": "Tournaments"
+            }
+        }
+    }
+}

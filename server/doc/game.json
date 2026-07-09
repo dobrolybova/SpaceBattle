@@ -1,0 +1,259 @@
+{
+    "openapi": "3.1.1",
+    "info": {
+        "title": "Space battle API: Game part.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1/games"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "List of all games.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Games"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/{game_id}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Data for particular game.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Game"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/join": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GameReq"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "User joins to the game.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GameResp"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong game or game is already started.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GameResp"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User is not authorised.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GameResp"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/new": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GameReq"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "User creates new game.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GameResp"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Game": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "data": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Data"
+                    },
+                    "tournaments": {
+                        "items": {
+                            "$ref": "#/components/schemas/Tournament"
+                        },
+                        "type": "array",
+                        "title": "Tournaments"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "data",
+                    "tournaments"
+                ],
+                "title": "Game"
+            },
+            "GameReq": {
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "title": "User Id"
+                    },
+                    "game_name": {
+                        "type": "string",
+                        "title": "Game Name"
+                    },
+                    "tournament": {
+                        "$ref": "#/components/schemas/Tournament"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_id",
+                    "game_name",
+                    "tournament"
+                ],
+                "title": "GameReq"
+            },
+            "GameResp": {
+                "properties": {
+                    "game_id": {
+                        "type": "integer",
+                        "title": "Game Id"
+                    },
+                    "game_name": {
+                        "type": "string",
+                        "title": "Game Name"
+                    },
+                    "game_status": {
+                        "$ref": "#/components/schemas/GametStatus"
+                    },
+                    "message": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "tournaments": {
+                        "items": {
+                            "$ref": "#/components/schemas/Tournament"
+                        },
+                        "type": "array",
+                        "title": "Tournaments"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "game_id",
+                    "game_name",
+                    "game_status",
+                    "message",
+                    "tournaments"
+                ],
+                "title": "GameResp"
+            },
+            "Games": {
+                "properties": {
+                    "games": {
+                        "items": {
+                            "$ref": "#/components/schemas/Game"
+                        },
+                        "type": "array",
+                        "title": "Games"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "games"
+                ],
+                "title": "Games"
+            },
+            "GametStatus": {
+                "type": "string",
+                "enum": [
+                    "STARTED",
+                    "NOT_STARTED",
+                    "FINISHED",
+                    "CANCELED"
+                ],
+                "title": "GametStatus"
+            },
+            "Tournament": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "title": "Tournament"
+            }
+        }
+    }
+}
