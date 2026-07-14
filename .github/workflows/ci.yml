@@ -26,10 +26,26 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run pytest
+      - name: Run server pytest
         run: |
           pytest ./server/tests --cov-config=.coveragerc --cov=server --cov-fail-under=100
 
-      - name: Run pylint
+      - name: Run auth pytest
+        run: |
+          pytest ./auth/tests --cov-config=.coveragerc --cov=auth --cov-fail-under=100
+
+      - name: Run player pytest
+        run: |
+          pytest ./player/tests --cov-config=.coveragerc --cov=player --cov-fail-under=100
+
+      - name: Run server pylint
         run: |
           pylint ./server
+
+      - name: Run auth pylint
+        run: |
+          pylint ./auth
+
+      - name: Run player pylint
+        run: |
+          pylint ./player

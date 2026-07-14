@@ -1,7 +1,5 @@
 from http import HTTPStatus
 
-import pytest
-
 from server.src.commands import InterpretCommand
 from server.src.enums import OperationId, GameStatus
 from server.src.ioc import Ioc
@@ -37,7 +35,7 @@ class SpaceShip:   # pylint: disable=R0801
 
 
 objects_pool = {
-    "battle_001": {
+    "game_1234": {
         "ship_001": SpaceShip(location=Point(12, 5), velocity=Vector(-7, 3), direction=Direction(angle=45),
                               angular_velocity=45),
         "ship_002": SpaceShip(location=Point(11, 5), velocity=Vector(7, 3), direction=Direction(angle=90),
@@ -82,37 +80,60 @@ def test_method_not_allowed(client):
 
 
 def test_unprocessable_entity(client):
-    res = client.post(url="/api/v1/execute", json={})
+    res = client.post(
+        url="/api/v1/execute",
+        json={},
+        headers={"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnYW1lX25hbWUiOiJnYW1lXzEyMzQiLCJ1c2VyX25hbWUiOiJ1c2VyMiJ9.ApHiO_m3nx3I-TwVQBs8V56d93mhXR-CWBs8SYY73tA"} # pylint: disable=C0301
+    )
     assert res.json() == {'detail': [{'input': {},
-                         'loc': ['body', 'game_id'],
-                         'msg': 'Field required',
-                         'type': 'missing'},
-                        {'input': {},
-                         'loc': ['body', 'object_id'],
-                         'msg': 'Field required',
-                         'type': 'missing'},
-                        {'input': {},
-                         'loc': ['body', 'operation_id'],
-                         'msg': 'Field required',
-                         'type': 'missing'},
-                        {'input': {},
-                         'loc': ['body', 'args'],
-                         'msg': 'Field required',
-                         'type': 'missing'}]}
+                             'loc': ['body', 'game_id'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'object_id'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'operation_id'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'args'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'game_id'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'object_id'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'operation_id'],
+                             'msg': 'Field required',
+                             'type': 'missing'},
+                            {'input': {},
+                             'loc': ['body', 'args'],
+                             'msg': 'Field required',
+                             'type': 'missing'}]}
     assert res.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
 
 def test_move(client):
-    obj = objects_pool.get("battle_001").get("ship_001")
+    obj = objects_pool.get("game_1234").get("ship_001")
     assert obj.get_location() == Point(12, 5)
     Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
     init()
-    res = client.post(url="/api/v1/execute", json={
-                                                    "game_id": "battle_001",
-                                                    "object_id": "ship_001",
-                                                    "operation_id": OperationId.MOVEMENT,
-                                                    "args": {}
-                                                })
+    res = client.post(url="/api/v1/execute",
+                      json={
+                            "game_id": "game_1234",
+                            "object_id": "ship_001",
+                            "operation_id": OperationId.MOVEMENT,
+                            "args": {}
+                        },
+                      headers={"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnYW1lX25hbWUiOiJnYW1lXzEyMzQiLCJ1c2VyX25hbWUiOiJ1c2VyMiJ9.ApHiO_m3nx3I-TwVQBs8V56d93mhXR-CWBs8SYY73tA"} # pylint: disable=C0301
+                      )
     assert res.json() == {'game_status': GameStatus.OK, 'message': 'Команда успешно выполнена'}
     assert res.status_code == HTTPStatus.OK
     assert obj.get_location() == Point(5, 8)
@@ -120,41 +141,103 @@ def test_move(client):
 
 
 def test_rotate(client):
-    obj = objects_pool.get("battle_001").get("ship_001")
+    obj = objects_pool.get("game_1234").get("ship_001")
     assert obj.get_direction() == Direction(45)
     Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
     init()
-    res = client.post(url="/api/v1/execute", json={
-                                                    "game_id": "battle_001",
-                                                    "object_id": "ship_001",
-                                                    "operation_id": OperationId.ROTATION,
-                                                    "args": {}
-                                                })
+    res = client.post(url="/api/v1/execute",
+                      json={
+                            "game_id": "game_1234",
+                            "object_id": "ship_001",
+                            "operation_id": OperationId.ROTATION,
+                            "args": {}
+                        },
+                      headers={"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnYW1lX25hbWUiOiJnYW1lXzEyMzQiLCJ1c2VyX25hbWUiOiJ1c2VyMiJ9.ApHiO_m3nx3I-TwVQBs8V56d93mhXR-CWBs8SYY73tA"} # pylint: disable=C0301
+                      )
     assert res.json() == {'game_status': GameStatus.OK, 'message': 'Команда успешно выполнена'}
     assert res.status_code == HTTPStatus.OK
     assert obj.get_direction() == Direction(90)
     Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
 
 
-@pytest.mark.parametrize(
-    "game_id, object_id",
-    [
-        ("battle_005", "ship_001"),
-        ("battle_001", "ship_005")
-    ],
-)
-def test_no_game_or_obj(client, game_id, object_id):
+def test_no_obj(client):
     Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
     init()
-    res = client.post(url="/api/v1/execute", json={
-                                                    "game_id": game_id,
-                                                    "object_id": object_id,
-                                                    "operation_id": OperationId.MOVEMENT,
-                                                    "args": {}
-                                                })
+    res = client.post(url="/api/v1/execute",
+                      json={
+                            "game_id": "game_1234",
+                            "object_id": "ship_005",
+                            "operation_id": OperationId.MOVEMENT,
+                            "args": {}
+                        },
+                      headers={"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnYW1lX25hbWUiOiJnYW1lXzEyMzQiLCJ1c2VyX25hbWUiOiJ1c2VyMiJ9.ApHiO_m3nx3I-TwVQBs8V56d93mhXR-CWBs8SYY73tA"} # pylint: disable=C0301
+                      )
     assert res.json() == {
         'game_status': GameStatus.GAME_OR_OBJECT_NOT_FOUND,
-        'message': f'Игра {game_id} не найдена или для нее не существует объекта {object_id}'
+        'message': 'Игра game_1234 не найдена или для нее не существует объекта ship_005'
     }
     assert res.status_code == HTTPStatus.OK
+    Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
+
+
+def test_no_game(client):
+    del objects_pool["game_1234"]
+    Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
+    init()
+    res = client.post(url="/api/v1/execute",
+                      json={
+                            "game_id": "game_1234",
+                            "object_id": "ship_001",
+                            "operation_id": OperationId.MOVEMENT,
+                            "args": {}
+                        },
+                      headers={"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnYW1lX25hbWUiOiJnYW1lXzEyMzQiLCJ1c2VyX25hbWUiOiJ1c2VyMiJ9.ApHiO_m3nx3I-TwVQBs8V56d93mhXR-CWBs8SYY73tA"} # pylint: disable=C0301
+                      )
+    assert res.json() == {
+        'game_status': GameStatus.GAME_OR_OBJECT_NOT_FOUND,
+        'message': 'Игра game_1234 не найдена или для нее не существует объекта ship_001'
+    }
+    assert res.status_code == HTTPStatus.OK
+    Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
+    objects_pool.update({
+        "game_1234": {
+            "ship_001": SpaceShip(location=Point(12, 5), velocity=Vector(-7, 3), direction=Direction(angle=45),
+                                  angular_velocity=45),
+            "ship_002": SpaceShip(location=Point(11, 5), velocity=Vector(7, 3), direction=Direction(angle=90),
+                                  angular_velocity=0),
+            "ship_003": SpaceShip(location=Point(10, 5), velocity=Vector(-7, -3), direction=Direction(angle=0),
+                                  angular_velocity=90),
+        }
+    })
+
+
+def test_no_token(client):
+    res = client.post(url="/api/v1/execute",
+                      json={
+                            "game_id": "battle_001",
+                            "object_id": "ship_001",
+                            "operation_id": OperationId.MOVEMENT,
+                            "args": {}
+                        },
+                      )
+    assert res.json() == {'detail': 'Not authenticated'}
+    assert res.status_code == HTTPStatus.UNAUTHORIZED
+
+
+def test_move_wrong_game_in_token(client):
+    obj = objects_pool.get("battle_002").get("ship_010")
+    assert obj.get_location() == Point(12, 5)
+    Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
+    init()
+    res = client.post(url="/api/v1/execute",
+                      json={
+                            "game_id": "battle_002",
+                            "object_id": "ship_010",
+                            "operation_id": OperationId.MOVEMENT,
+                            "args": {}
+                        },
+                      headers={"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnYW1lX25hbWUiOiJnYW1lXzEyMzQiLCJ1c2VyX25hbWUiOiJ1c2VyMiJ9.ApHiO_m3nx3I-TwVQBs8V56d93mhXR-CWBs8SYY73tA"}  # pylint: disable=C0301
+                      )
+    assert res.json() == {'detail': 'Wrong game name game_1234 in token'}
+    assert res.status_code == HTTPStatus.UNAUTHORIZED
     Ioc._strategy = Ioc.reset_strategy()  # pylint: disable=W0212
