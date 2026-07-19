@@ -1,4 +1,7 @@
-pytest>=3.10.1
+aioresponses
+aiohttp
+starlette
+pyjwt
 pylint==4.0.5
 pytest-cov==7.1.0
 pyfakefs==5.7.1
@@ -7,3 +10,6 @@ pydantic>=2.3.0
 uvicorn>=0.23.2
 httpx2>=0.1.2
 openapi_pydantic==0.5.1
+pytest-asyncio==0.21.1
+asynctest==0.13.0
+pytest==9.0.3

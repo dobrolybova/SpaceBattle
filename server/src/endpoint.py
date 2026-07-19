@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, APIRouter
 
+from server.src.dependencies import has_access
 from server.src.enums import GameStatus
 from server.src.interfaces import IMovable, IRotatable
 from server.src.ioc import Ioc
@@ -7,9 +8,11 @@ from server.src.schemas import GameMessage, GameResponse
 
 
 app = FastAPI()
+main_router = APIRouter(prefix="/api/v1/execute")
 
+app.include_router(main_router, dependencies=[Depends(has_access)])
 
-@app.post("/api/v1/execute")
+@main_router.post("")
 async def update_item(item: GameMessage) -> GameResponse:
     obj: IMovable | IRotatable = Ioc.resolve("Get.Object", item.game_id, item.object_id)
     if not obj:
