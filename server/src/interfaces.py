@@ -57,3 +57,11 @@ class IFuelConsumer(Protocol):
 class IDependencyResolver(Protocol):
     def resolve(self, dependency: str, *args) -> Any:
         ...
+
+
+class IThreadState(Protocol):
+    def handle_command(self):
+        ...
+
+    def cur_queue(self):
+        ...
