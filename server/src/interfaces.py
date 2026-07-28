@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Protocol, Any
 
 from server.src.utils import Point, Vector, Direction
@@ -64,4 +65,29 @@ class IThreadState(Protocol):
         ...
 
     def cur_queue(self):
+        ...
+
+
+class Obj(Protocol):
+    def get_id(self) -> Any:
+        ...
+
+
+class Handler(ABC):
+    def __init__(self, successor=None):
+        self._successor = successor
+
+    @abstractmethod
+    def execute(self, request: Any):
+        ...
+
+
+class NeighborhoodSystem(Protocol):
+    def update_neighborhood(self, obj: IMovable | Obj) -> None:
+        ...
+
+    def define_neighborhood(self, obj: IMovable | Obj) -> int:
+        ...
+
+    def delete_obj_from_neighborhood(self, obj: IMovable | Obj) -> None:
         ...
