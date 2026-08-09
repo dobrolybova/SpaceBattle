@@ -1,6 +1,6 @@
 from server.src.commands import MacroCommand
 from server.src.exceptions import FuelNotEnough
-from server.src.interfaces import IMovable, IRotatable, IFuelConsumer, IDirectionChangeable
+from server.src.interfaces import IMovable, IRotatable, IFuelConsumer, IDirectionChangeable, Obj
 from server.src.utils import Vector, Point, Direction
 
 
@@ -68,3 +68,22 @@ class RotateWithChangeVelocity(MacroCommand):
             Rotate(rotatable=rotatable),
             ChangeVelocity(direction_changeable=direction_changeable, modifier=modifier)
         ])
+
+
+class Stop:
+    def __init__(self, obj: Obj):
+        self.obj = obj
+
+    def execute(self):
+        # No logic, just to check function was called
+        return self.obj.get_id()
+
+
+class Fire:
+    def __init__(self, obj: Obj, velocity: int):
+        self.obj = obj
+        self.velocity = velocity
+
+    def execute(self):
+        # No logic, just to check function was called
+        return self.obj.get_id()

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from server.src.enums import OperationId, GameStatus
 
@@ -51,3 +51,8 @@ class GameResponse(BaseModel):
             ]
         }
     }
+
+class Order(BaseModel):
+    id: int
+    action: str
+    model_config = ConfigDict(extra='allow')
